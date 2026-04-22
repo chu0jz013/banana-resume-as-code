@@ -444,7 +444,14 @@ function App() {
             <div className="entry" key={`${entry.school}-${entry.period}`}>
               <div className="entry-head">
                 <span className="entry-left">
-                  <b>{entry.school}</b>, {entry.credential}
+                  {entry.schoolUrl ? (
+                    <a href={entry.schoolUrl} target="_blank" rel="noreferrer">
+                      <b>{entry.school}</b>
+                    </a>
+                  ) : (
+                    <b>{entry.school}</b>
+                  )}
+                  , {entry.credential}
                 </span>
                 <span className="entry-right">{entry.period}</span>
               </div>
@@ -802,7 +809,7 @@ const css = `
   .${PRINT_MEASURE_CLASS} .contact { font-size: 8pt; margin-top: 2px; }
   .${PRINT_MEASURE_CLASS} .section { margin-top: 6px; }
   .${PRINT_MEASURE_CLASS} .section-title { font-size: 11.55pt; margin-bottom: 1px; padding-bottom: 1px; }
-  .${PRINT_MEASURE_CLASS} .section-body { font-size: 9.85pt; line-height: 1.305; }
+  .${PRINT_MEASURE_CLASS} .section-body { font-size: 9.85pt; line-height: 1.23; }
   .${PRINT_MEASURE_CLASS} .para { font-size: 9.85pt; }
   .${PRINT_MEASURE_CLASS} .entry { margin-top: 2px; }
   .${PRINT_MEASURE_CLASS} .entry-head { font-size: 9.85pt; }
@@ -895,7 +902,7 @@ const css = `
     .contact { font-size: 8pt; margin-top: 2px; }
     .section { margin-top: 6px; }
     .section-title { font-size: 11.55pt; margin-bottom: 1px; padding-bottom: 1px; }
-    .section-body { font-size: 9.85pt; line-height: 1.305; }
+    .section-body { font-size: 9.85pt; line-height: 1.23; }
     .para { font-size: 9.85pt; }
     .entry { margin-top: 2px; }
     .entry-head { font-size: 9.85pt; }

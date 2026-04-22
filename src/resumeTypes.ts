@@ -42,6 +42,7 @@ export type SkillGroup = {
 
 export type EducationEntry = {
   school: string
+  schoolUrl?: string
   credential: string
   period: string
   bullets: RichText[]

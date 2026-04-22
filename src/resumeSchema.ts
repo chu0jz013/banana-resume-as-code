@@ -74,6 +74,7 @@ const resumeSchema = z
         z
           .object({
             school: z.string().min(1),
+            schoolUrl: z.string().min(1).optional(),
             credential: z.string().min(1),
             period: z.string().min(1),
             bullets: z.array(richTextSchema).min(1),

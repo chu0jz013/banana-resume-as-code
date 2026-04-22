@@ -46,61 +46,79 @@ export const resume: ResumeData = {
       ]
     },
     {
-      "text": " designing, building, and operating "
+      "text": " of experience designing, building, and operating "
     },
     {
-      "text": "cloud-native systems",
+      "text": "cloud-native platforms",
       "marks": [
         "bold"
       ]
     },
     {
-      "text": " on AWS and on-prem. Delivered an on-prem "
+      "text": ", with strong focus on "
     },
     {
-      "text": "Kubernetes (RKE2)",
+      "text": "AWS",
       "marks": [
         "bold"
       ]
     },
     {
-      "text": " platform and observability stack processing "
+      "text": ", "
     },
     {
-      "text": "~8B logs",
+      "text": "Kubernetes",
       "marks": [
         "bold"
       ]
     },
     {
-      "text": ", enforcing "
+      "text": ", "
     },
     {
-      "text": "99.95% availability",
+      "text": "observability",
       "marks": [
         "bold"
       ]
     },
     {
-      "text": " and "
+      "text": ", and "
     },
     {
-      "text": "p95 <= 450ms",
+      "text": "reliability engineering",
       "marks": [
         "bold"
       ]
     },
     {
-      "text": " SLOs with burn-rate alerting. Proven in turning legacy workloads into automated, "
+      "text": ". Hands-on in monitoring, tracing, incident response, automation, and "
     },
     {
-      "text": "SLO-driven",
+      "text": "SLI/SLO-driven",
       "marks": [
         "bold"
       ]
     },
     {
-      "text": " platforms - shipping reliability, velocity, and developer self-service at scale."
+      "text": " operations for production systems at scale. Experienced in both cloud and on-prem environments, including delivering "
+    },
+    {
+      "text": "HA Kubernetes platforms",
+      "marks": [
+        "bold"
+      ]
+    },
+    {
+      "text": " and large-scale observability stacks processing "
+    },
+    {
+      "text": "~8B access logs",
+      "marks": [
+        "bold"
+      ]
+    },
+    {
+      "text": ". Proven ability to improve reliability, scalability, and developer velocity by modernizing legacy systems into automated, resilient, self-service platforms."
     }
   ],
   "projects": [
@@ -207,13 +225,13 @@ export const resume: ResumeData = {
             "text": ", "
           },
           {
-            "text": "p95 <= 450ms",
+            "text": "p95 latency",
             "marks": [
               "bold"
             ]
           },
           {
-            "text": " - with multi-window burn-rate alerting (5m/1h, 30m/6h, 3d), shifting operations from reactive to proactive."
+            "text": " metrics with multi-window burn-rate alerting (5m/1h, 30m/6h, 3d) and on-call rotation & escalation setup, shifting operations from reactive to proactive."
           }
         ],
         [
@@ -250,15 +268,6 @@ export const resume: ResumeData = {
             ]
           },
           {
-            "text": " and "
-          },
-          {
-            "text": "ClickHouse (Altinity)",
-            "marks": [
-              "bold"
-            ]
-          },
-          {
             "text": " on "
           },
           {
@@ -273,10 +282,10 @@ export const resume: ResumeData = {
         ],
         [
           {
-            "text": "Automated event-driven pipelines with "
+            "text": "Automated GitOps and workflow pipelines with "
           },
           {
-            "text": "Argo Workflows + Argo Events",
+            "text": "ArgoCD + Argo Workflows",
             "marks": [
               "bold"
             ]
@@ -436,7 +445,7 @@ export const resume: ResumeData = {
     },
     {
       "group": "Serverless & Data",
-      "items": "Lambda / API Gateway / Cognito / DynamoDB / DocumentDB / Aurora/RDS / Kafka / Redis / Elasticsearch / ClickHouse"
+      "items": "Lambda / API Gateway / Cognito / DynamoDB / DocumentDB / Aurora/RDS / Kafka / Redis / Elasticsearch"
     },
     {
       "group": "Languages & Apps",
@@ -446,6 +455,7 @@ export const resume: ResumeData = {
   "education": [
     {
       "school": "FPT University",
+      "schoolUrl": "https://daihoc.fpt.edu.vn/",
       "credential": "Bachelor's degree in Software Engineering",
       "period": "Oct 2021 - Aug 2025",
       "bullets": [
@@ -457,7 +467,8 @@ export const resume: ResumeData = {
             "text": "FCTF (FPT Capture The Flag)",
             "marks": [
               "bold"
-            ]
+            ],
+            "href": "https://iahn.fpt.edu.vn/du-an/fpt-capture-the-flag-fctf"
           },
           {
             "text": "."
