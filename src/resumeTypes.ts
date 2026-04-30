@@ -31,6 +31,7 @@ export type ExperienceRole = {
   title: string
   company: string
   companyUrl?: string
+  location?: string
   period: string
   bullets: RichText[]
 }

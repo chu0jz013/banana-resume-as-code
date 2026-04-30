@@ -53,6 +53,7 @@ const resumeSchema = z
             title: z.string().min(1),
             company: z.string().min(1),
             companyUrl: z.string().min(1).optional(),
+            location: z.string().min(1).optional(),
             period: z.string().min(1),
             bullets: z.array(richTextSchema).min(1),
           })

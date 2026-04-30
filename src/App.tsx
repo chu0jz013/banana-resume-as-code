@@ -1,8 +1,10 @@
-import { Fragment, useEffect, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useState } from 'react'
 import defaultResumeYaml from '../resume.yaml?raw'
 import { resume as generatedResume } from './resume.generated'
 import { parseResumeYaml, ResumeYamlError } from './resumeSchema'
-import type { ResumeData, RichText, RichTextSpan } from './resumeTypes'
+import type { ResumeData } from './resumeTypes'
+import { DEFAULT_TEMPLATE_ID, TEMPLATES, findTemplate } from './templates'
+import { PRINT_MEASURE_CLASS } from './templates/shared'
 import './App.css'
 
 type FontOption = {
@@ -52,16 +54,16 @@ const GOOGLE_FONTS_HREF =
   '&family=Manrope:wght@400;500;600;700' +
   '&family=Source+Serif+4:wght@400;600;700' +
   '&family=EB+Garamond:wght@400;600;700' +
+  '&family=JetBrains+Mono:wght@400;500;700;800' +
   '&display=swap'
 
 const FONT_STORAGE_KEY = 'resume-font-id'
+const TEMPLATE_STORAGE_KEY = 'resume-template-id'
 const YAML_STORAGE_KEY = 'resume-yaml-draft'
 
 const A4_PAGE_HEIGHT_PX = 1123
 const MIN_FIT_SCALE = 0.72
 const RESUME_SELECTOR = '.resume'
-const PRINT_MEASURE_CLASS = 'resume-print-measure'
-const AVATAR_SRC = '/avatar.jpg'
 
 type YamlStatus =
   | { kind: 'idle'; message: string }
@@ -167,6 +169,11 @@ function App() {
     return window.localStorage.getItem(FONT_STORAGE_KEY) || 'inter'
   })
 
+  const [templateId, setTemplateId] = useState<string>(() => {
+    if (typeof window === 'undefined') return DEFAULT_TEMPLATE_ID
+    return window.localStorage.getItem(TEMPLATE_STORAGE_KEY) || DEFAULT_TEMPLATE_ID
+  })
+
   const [draftYaml, setDraftYaml] = useState<string>(() => readStoredYaml() ?? defaultResumeYaml)
   const [activeResume, setActiveResume] = useState<ResumeData>(generatedResume)
   const [yamlStatus, setYamlStatus] = useState<YamlStatus>(() => createInitialYamlStatus())
@@ -179,6 +186,14 @@ function App() {
       /* ignore */
     }
   }, [fontId])
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(TEMPLATE_STORAGE_KEY, templateId)
+    } catch {
+      /* ignore */
+    }
+  }, [templateId])
 
   useEffect(() => {
     function onBeforePrint() {
@@ -264,15 +279,35 @@ function App() {
   }
 
   const activeFont = FONT_OPTIONS.find((font) => font.id === fontId) ?? FONT_OPTIONS[0]
+  const activeTemplate = findTemplate(templateId)
+  const TemplateComponent = activeTemplate.Component
 
   return (
     <div className="resume-root">
-      <style>{css}</style>
+      <style>{shellCss}</style>
 
       <div className="toolbar">
         <div className="toolbar-inner">
           <span className="toolbar-title">resume.yaml</span>
           <div className="toolbar-actions">
+            <label className="font-picker">
+              <span className="font-picker-label">Template</span>
+              <select
+                value={templateId}
+                onChange={(event) => {
+                  setTemplateId(event.target.value)
+                  resetResumeZoom()
+                  setFitInfo(null)
+                }}
+                aria-label="Resume template"
+              >
+                {TEMPLATES.map((template) => (
+                  <option key={template.id} value={template.id}>
+                    {template.label} - {template.description}
+                  </option>
+                ))}
+              </select>
+            </label>
             <label className="font-picker">
               <span className="font-picker-label">Font</span>
               <select
@@ -346,191 +381,14 @@ function App() {
         </aside>
 
         <div className="resume-stage">
-          <main
-            className="resume"
-            style={{ ['--resume-font' as string]: activeFont.family } as CSSProperties}
-          >
-        <header className="hdr">
-          <img className="avatar" src={AVATAR_SRC} alt={activeResume.profile.name} />
-          <h1 className="name">{activeResume.profile.name}</h1>
-          <p className="contact">
-            {activeResume.profile.contacts.map((contact, index) => (
-              <Fragment key={`${contact.label}-${index}`}>
-                {index > 0 && <span className="bar">|</span>}
-                {contact.href ? (
-                  <a
-                    href={contact.href}
-                    target={isExternalHref(contact.href) ? '_blank' : undefined}
-                    rel={isExternalHref(contact.href) ? 'noreferrer' : undefined}
-                  >
-                    {contact.label}
-                  </a>
-                ) : (
-                  <span>{contact.label}</span>
-                )}
-              </Fragment>
-            ))}
-          </p>
-        </header>
-
-        <Section title="Summary">
-          <p className="para">{renderRichText(activeResume.summary)}</p>
-        </Section>
-
-        <Section title="Experience">
-          {activeResume.experience.map((role) => (
-            <div className="entry" key={`${role.company}-${role.period}`}>
-              <div className="entry-head">
-                <span className="entry-left">
-                  <b>{role.title}</b>,{' '}
-                  {role.companyUrl ? (
-                    <a href={role.companyUrl} target="_blank" rel="noreferrer">
-                      {role.company}
-                    </a>
-                  ) : (
-                    role.company
-                  )}
-                </span>
-                <span className="entry-right">{role.period}</span>
-              </div>
-              <ul className="bullets">
-                {role.bullets.map((bullet, index) => (
-                  <li key={index}>{renderRichText(bullet)}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </Section>
-
-        <Section title="Projects">
-          {activeResume.projects.map((project) => (
-            <div className="entry" key={project.name}>
-              <div className="entry-head">
-                <span className="entry-left">{project.name}</span>
-                {(project.url || project.urlLabel) && (
-                  <span className="entry-right">
-                    {project.url ? (
-                      <a href={project.url} target="_blank" rel="noreferrer">
-                        {project.urlLabel ?? project.url}
-                      </a>
-                    ) : (
-                      project.urlLabel
-                    )}
-                  </span>
-                )}
-              </div>
-              <ul className="bullets">
-                {project.bullets.map((bullet, index) => (
-                  <li key={index}>{renderRichText(bullet)}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </Section>
-
-        <Section title="Skills">
-          <div className="skills">
-            {activeResume.skills.map((skill) => (
-              <div className="skill-row" key={skill.group}>
-                <span className="skill-group">{skill.group}</span>
-                <span className="skill-items">{skill.items}</span>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        <Section title="Education">
-          {activeResume.education.map((entry) => (
-            <div className="entry" key={`${entry.school}-${entry.period}`}>
-              <div className="entry-head">
-                <span className="entry-left">
-                  {entry.schoolUrl ? (
-                    <a href={entry.schoolUrl} target="_blank" rel="noreferrer">
-                      <b>{entry.school}</b>
-                    </a>
-                  ) : (
-                    <b>{entry.school}</b>
-                  )}
-                  , {entry.credential}
-                </span>
-                <span className="entry-right">{entry.period}</span>
-              </div>
-              <ul className="bullets">
-                {entry.bullets.map((bullet, index) => (
-                  <li key={index}>{renderRichText(bullet)}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </Section>
-
-        <Section title="Certifications">
-          <ul className="bullets plain">
-            {activeResume.certifications.map((certification) => (
-              <li key={certification.name}>
-                {certification.url ? (
-                  <a href={certification.url} target="_blank" rel="noreferrer">
-                    <b>{certification.name}</b>
-                  </a>
-                ) : (
-                  <b>{certification.name}</b>
-                )}
-                , {certification.issuer}
-              </li>
-            ))}
-          </ul>
-        </Section>
-          </main>
+          <TemplateComponent data={activeResume} fontFamily={activeFont.family} />
         </div>
       </div>
     </div>
   )
 }
 
-function renderRichText(richText: RichText) {
-  return richText.map((span, index) => <Fragment key={index}>{renderRichTextSpan(span)}</Fragment>)
-}
-
-function renderRichTextSpan(span: RichTextSpan): ReactNode {
-  let node: ReactNode = span.text
-
-  if (span.marks?.includes('code')) {
-    node = <code>{node}</code>
-  }
-
-  if (span.marks?.includes('bold')) {
-    node = <b>{node}</b>
-  }
-
-  if (span.href) {
-    node = (
-      <a
-        href={span.href}
-        target={isExternalHref(span.href) ? '_blank' : undefined}
-        rel={isExternalHref(span.href) ? 'noreferrer' : undefined}
-      >
-        {node}
-      </a>
-    )
-  }
-
-  return node
-}
-
-function isExternalHref(href: string) {
-  return href.startsWith('http://') || href.startsWith('https://')
-}
-
-function Section({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section className="section">
-      <h2 className="section-title">{title}</h2>
-      <div className="section-body">{children}</div>
-    </section>
-  )
-}
-
-const css = `
+const shellCss = `
   :root { color-scheme: light; }
   body:has(.resume-root) {
     margin: 0;
@@ -555,8 +413,6 @@ const css = `
     text-align: left;
   }
   .resume-root { width: 100%; min-height: 100vh; }
-  .resume-root a { color: #111827; text-decoration: underline; text-underline-offset: 2px; }
-  .resume-root a:hover { color: #1d4ed8; }
 
   .toolbar {
     position: sticky; top: 0; z-index: 10;
@@ -566,7 +422,7 @@ const css = `
     font-family: -apple-system, "Segoe UI", Inter, sans-serif;
   }
   .toolbar-inner {
-    max-width: 820px; margin: 0 auto;
+    max-width: 1100px; margin: 0 auto;
     padding: 10px 20px;
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
   }
@@ -589,7 +445,7 @@ const css = `
     border: 1px solid #d1d5db; border-radius: 6px;
     background: #fff; color: #111827;
     cursor: pointer;
-    min-width: 220px;
+    min-width: 200px;
   }
   .font-picker select:hover { border-color: #9ca3af; }
   .font-picker select:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 1px; }
@@ -707,117 +563,6 @@ const css = `
     margin: 0;
   }
 
-  .resume {
-    max-width: 820px;
-    margin: 28px auto 48px;
-    background: #fff;
-    padding: 56px 64px;
-    box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 8px 24px rgba(0,0,0,.08);
-    border: 1px solid #d1d5db;
-  }
-
-  .${PRINT_MEASURE_CLASS} {
-    position: absolute !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    left: -10000px !important;
-    top: 0 !important;
-    width: 210mm !important;
-    box-sizing: border-box !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 10mm 12mm !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-
-  .hdr {
-    position: relative;
-    text-align: center;
-    padding-right: 96px;
-    padding-left: 96px;
-    margin-bottom: 6px;
-  }
-  .avatar {
-    position: absolute; top: -4px; right: 0;
-    width: 86px; height: 86px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid #d1d5db;
-  }
-  .name {
-    margin: 0;
-    font-size: 34px; font-weight: 700;
-    letter-spacing: -0.2px; color: #111827;
-    line-height: 1.1;
-  }
-  .contact {
-    margin: 8px 0 0;
-    font-size: 12.5px; color: #1f2937;
-    line-height: 1.4;
-  }
-  .contact .bar { color: #9ca3af; margin: 0 6px; }
-
-  .section { margin-top: 14px; }
-  .section-title {
-    font-size: 15px; font-weight: 700; color: #111827;
-    margin: 0 0 4px;
-    padding-bottom: 2px;
-    border-bottom: 1px solid #111827;
-    letter-spacing: -0.1px;
-  }
-  .section-body { font-size: 12.5px; line-height: 1.45; color: #1f2937; }
-
-  .para { margin: 4px 0 0; text-align: justify; hyphens: auto; }
-
-  .entry { margin-top: 6px; }
-  .entry:first-child { margin-top: 2px; }
-  .entry-head {
-    display: flex; justify-content: space-between; align-items: baseline;
-    gap: 12px; flex-wrap: wrap;
-    font-size: 13px;
-  }
-  .entry-left { color: #111827; }
-  .entry-right { color: #1f2937; font-variant-numeric: tabular-nums; }
-
-  .bullets {
-    margin: 2px 0 0;
-    padding-left: 20px;
-    color: #1f2937;
-  }
-  .bullets li { margin: 2px 0; }
-  .bullets.plain { padding-left: 20px; }
-  .bullets code {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 0.88em;
-    background: #f3f4f6;
-    padding: 0 3px;
-    border-radius: 3px;
-  }
-
-  .skills { display: flex; flex-direction: column; gap: 2px; }
-  .skill-row {
-    display: grid; grid-template-columns: 150px 1fr;
-    gap: 10px; font-size: 12.5px;
-  }
-  .skill-group { font-weight: 700; color: #111827; }
-  .skill-items { color: #1f2937; }
-
-  .${PRINT_MEASURE_CLASS} .hdr { padding-right: 58px; padding-left: 58px; margin-bottom: 3px; }
-  .${PRINT_MEASURE_CLASS} .avatar { width: 58px; height: 58px; top: 0; }
-  .${PRINT_MEASURE_CLASS} .name { font-size: 20pt; }
-  .${PRINT_MEASURE_CLASS} .contact { font-size: 8pt; margin-top: 2px; }
-  .${PRINT_MEASURE_CLASS} .section { margin-top: 6px; }
-  .${PRINT_MEASURE_CLASS} .section-title { font-size: 11.55pt; margin-bottom: 1px; padding-bottom: 1px; }
-  .${PRINT_MEASURE_CLASS} .section-body { font-size: 9.85pt; line-height: 1.23; }
-  .${PRINT_MEASURE_CLASS} .para { font-size: 9.85pt; }
-  .${PRINT_MEASURE_CLASS} .entry { margin-top: 2px; }
-  .${PRINT_MEASURE_CLASS} .entry-head { font-size: 9.85pt; }
-  .${PRINT_MEASURE_CLASS} .entry-right { font-size: 9.35pt; }
-  .${PRINT_MEASURE_CLASS} .bullets { padding-left: 12px; margin-top: 0; }
-  .${PRINT_MEASURE_CLASS} .bullets li { margin: 0; }
-  .${PRINT_MEASURE_CLASS} .skill-row { font-size: 9.35pt; grid-template-columns: 112px 1fr; gap: 6px; }
-
   @media (max-width: 1100px) {
     .resume-workbench {
       width: min(100% - 28px, 820px);
@@ -834,11 +579,6 @@ const css = `
     .yaml-panel-head { align-items: flex-start; flex-direction: column; }
     .yaml-panel-actions { justify-content: flex-start; }
     .yaml-editor { min-height: 320px; }
-    .resume { padding: 28px 24px; margin: 14px; }
-    .resume-stage .resume { margin: 14px; }
-    .hdr { padding: 0; }
-    .avatar { position: static; display: block; margin: 0 auto 10px; }
-    .skill-row { grid-template-columns: 1fr; }
   }
 
   @media print {
@@ -881,37 +621,6 @@ const css = `
       overflow: hidden;
     }
     .toolbar, .yaml-panel, .print-hint, .fit-badge, .ghost-btn { display: none !important; }
-    .resume {
-      width: 210mm;
-      height: 297mm;
-      min-height: 0;
-      max-width: none;
-      margin: 0;
-      padding: 10mm 12mm;
-      box-sizing: border-box;
-      box-shadow: none; border: none;
-      overflow: hidden;
-    }
-    * {
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
-    .hdr { padding-right: 58px; padding-left: 58px; margin-bottom: 3px; }
-    .avatar { width: 58px; height: 58px; top: 0; }
-    .name { font-size: 20pt; }
-    .contact { font-size: 8pt; margin-top: 2px; }
-    .section { margin-top: 6px; }
-    .section-title { font-size: 11.55pt; margin-bottom: 1px; padding-bottom: 1px; }
-    .section-body { font-size: 9.85pt; line-height: 1.23; }
-    .para { font-size: 9.85pt; }
-    .entry { margin-top: 2px; }
-    .entry-head { font-size: 9.85pt; }
-    .entry-right { font-size: 9.35pt; }
-    .bullets { padding-left: 12px; margin-top: 0; }
-    .bullets li { margin: 0; }
-    .skill-row { font-size: 9.35pt; grid-template-columns: 112px 1fr; gap: 6px; }
-    a { color: #111827; }
-    .entry, .skill-row { page-break-inside: avoid; break-inside: avoid; }
   }
 `
 
