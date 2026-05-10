@@ -1,0 +1,98 @@
+name: Deploy dist
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-dist-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DESTINATION_REPOSITORY: chu0jz013/banana-resume-as-code-ghp
+  DESTINATION_BRANCH: master
+  DEPLOY_DIR: deploy-repo
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: prod
+
+    steps:
+      - name: Check deployment token
+        env:
+          GH_PAGES_DEPLOY_TOKEN: ${{ secrets.GH_PAGES_DEPLOY_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "$GH_PAGES_DEPLOY_TOKEN" ]; then
+            echo "Missing GH_PAGES_DEPLOY_TOKEN secret."
+            echo "Create a fine-grained PAT with Contents: Read and write for ${DESTINATION_REPOSITORY}."
+            exit 1
+          fi
+
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static files
+        run: npm run build
+
+      - name: Clone destination repository
+        env:
+          GH_PAGES_DEPLOY_TOKEN: ${{ secrets.GH_PAGES_DEPLOY_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          repo_url="https://x-access-token:${GH_PAGES_DEPLOY_TOKEN}@github.com/${DESTINATION_REPOSITORY}.git"
+
+          if git ls-remote --exit-code --heads "$repo_url" "$DESTINATION_BRANCH" > /dev/null 2>&1; then
+            git clone --depth 1 --branch "$DESTINATION_BRANCH" "$repo_url" "$DEPLOY_DIR"
+          else
+            git clone "$repo_url" "$DEPLOY_DIR"
+            cd "$DEPLOY_DIR"
+            git checkout --orphan "$DESTINATION_BRANCH"
+            git rm -rf . > /dev/null 2>&1 || true
+          fi
+
+      - name: Copy dist static files
+        run: |
+          set -euo pipefail
+
+          rsync -a --delete --exclude ".git" dist/ "$DEPLOY_DIR"/
+          touch "$DEPLOY_DIR/.nojekyll"
+
+          if [ -f CNAME ]; then
+            cp CNAME "$DEPLOY_DIR/CNAME"
+          fi
+
+      - name: Push deployment
+        run: |
+          set -euo pipefail
+
+          cd "$DEPLOY_DIR"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No dist changes to deploy."
+            exit 0
+          fi
+
+          git commit -m "Deploy dist from ${GITHUB_REPOSITORY}@${GITHUB_SHA::7}"
+          git push origin "HEAD:${DESTINATION_BRANCH}"

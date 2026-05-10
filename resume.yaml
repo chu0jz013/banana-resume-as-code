@@ -1,69 +1,42 @@
 profile:
   name: "Kieu Nam Hai"
   alias: "William Kieu"
-  title: "DevOps / SRE / Platform Engineer"
+  title: "Platform Engineer / SRE / DevOps"
   contacts:
     - label: "williamkieu-devops@outlook.com"
       href: "mailto:williamkieu-devops@outlook.com"
     - label: "+84 961 513 848"
     - label: "github.com/chu0jz013"
       href: "https://github.com/chu0jz013"
-    - label: "williamkieuu-devops.cloud"
-      href: "https://williamkieuu-devops.cloud"
+    - label: "Linkedin"
+      href: "https://www.linkedin.com/in/williamkieuu/"
     - label: "Hanoi, Vietnam"
 
 summary:
-  - text: "DevOps / SRE / Platform Engineer"
+  - text: "DevOps Engineer / SRE "
     marks: [bold]
   - text: " with "
   - text: "3+ years"
     marks: [bold]
-  - text: " of experience designing, building, and operating "
-  - text: "cloud-native platforms"
+  - text: " building and operating "
+  - text: "Kubernetes and observability platforms"
     marks: [bold]
-  - text: ", with strong focus on "
-  - text: "AWS"
+  - text: " at scale - currently operating systems serving "
+  - text: "50k+ merchants"
     marks: [bold]
-  - text: ", "
-  - text: "Kubernetes"
+  - text: ". Work across "
+  - text: "Kubernetes, ELK Stack, Grafana, Prometheus, and OpenTelemetry"
     marks: [bold]
-  - text: ", "
-  - text: "observability"
+  - text: " to support reliability and platform visibility. Drive "
+  - text: "self-service, automation, and SLI/SLO-driven on-call"
     marks: [bold]
-  - text: ", and "
-  - text: "reliability engineering"
+  - text: " through Terraform, GitOps, and reusable platform abstractions to improve developer velocity and reliability. "
+  - text: "Work well under pressure"
     marks: [bold]
-  - text: ". Hands-on in monitoring, tracing, incident response, automation, and "
-  - text: "SLI/SLO-driven"
+  - text: ", strong ownership & collaborative mindset; passionate about platform engineering & automation; open to "
+  - text: "relocation, remote, and 24/7 on-call"
     marks: [bold]
-  - text: " operations for production systems at scale. Experienced in both cloud and on-prem environments, including delivering "
-  - text: "HA Kubernetes platforms"
-    marks: [bold]
-  - text: " and large-scale observability stacks processing "
-  - text: "~8B access logs"
-    marks: [bold]
-  - text: ". Proven ability to improve reliability, scalability, and developer velocity by modernizing legacy systems into automated, resilient, self-service platforms."
-
-projects:
-  - name: "FCTF - FPT Capture The Flag"
-    url: "https://iahn.fpt.edu.vn/du-an/fpt-capture-the-flag-fctf"
-    urlLabel: "iahn.fpt.edu.vn - FCTF"
-    bullets:
-      - - text: "Open-source CTF competition platform - "
-        - text: "graduation project"
-          marks: [bold]
-        - text: " awarded the "
-        - text: "highest graduation-project grade in the semester"
-          marks: [bold]
-        - text: "."
-      - - text: "Built the platform that provisions "
-        - text: "isolated per-contestant sandboxed containers"
-          marks: [bold]
-        - text: " for each challenge - ensuring safe, reproducible, and reset-able environments."
-      - - text: "Designed "
-        - text: "challenge lifecycle management"
-          marks: [bold]
-        - text: " (spin-up, networking, teardown) and automated deployment of challenge images across the platform."
+  - text: "."
 
 experience:
   - title: "DevOps Engineer / SRE"
@@ -71,109 +44,111 @@ experience:
     companyUrl: "https://kiotviet.vn"
     period: "Sep 2025 - Present"
     bullets:
-      - - text: "Designed and operated an "
-        - text: "HA on-prem Kubernetes platform (RKE2)"
+      - - text: "Operate "
+        - text: "Kubernetes-based production systems"
           marks: [bold]
-        - text: " with "
-        - text: "multi-master + HAProxy VIP + Keepalived"
+        - text: " serving "
+        - text: "50k+ merchants"
           marks: [bold]
-        - text: " and Calico CNI - replacing legacy Docker Compose deployments for F&B production workloads."
+        - text: ", covering deployment, reliability, observability, and platform automation for business-critical workloads."
+      - - text: "Maintain observability with "
+        - text: "ELK Stack"
+          marks: [bold]
+        - text: " for logs and "
+        - text: "Grafana / Prometheus / OpenTelemetry"
+          marks: [bold]
+        - text: " for metrics and traces, improving incident response and service visibility across Kubernetes workloads."
+      - - text: "Drive "
+        - text: "self-service and platform automation"
+          marks: [bold]
+        - text: " through "
+        - text: "GitOps (ArgoCD + Argo Workflows)"
+          marks: [bold]
+        - text: " and "
+        - text: "Terraform"
+          marks: [bold]
+        - text: " automation; built reusable execution models and onboarding workflows that let developers ship without platform-team toil."
       - - text: "Defined an "
         - text: "SLI/SLO framework - 99.95% availability"
           marks: [bold]
         - text: ", "
         - text: "p95 latency"
           marks: [bold]
-        - text: " metrics with multi-window burn-rate alerting (5m/1h, 30m/6h, 3d) and on-call rotation & escalation setup, shifting operations from reactive to proactive."
-      - - text: "Built centralized observability on "
-        - text: "ELK (ECK), Grafana, Prometheus, OpenTelemetry"
-          marks: [bold]
-        - text: "; processed "
-        - text: "~8B APISIX access logs"
-          marks: [bold]
-        - text: " and engineered log->metrics transforms (ES Transform / Logstash) for SLO computation."
-      - - text: "Operated stateful workloads - "
+        - text: " - with multi-window burn-rate alerting, on-call rotation & escalation, and incident runbooks; shifted operations from reactive to proactive."
+      - - text: "Own platform security and stateful workloads - "
         - text: "Elasticsearch (ECK)"
           marks: [bold]
-        - text: " on "
-        - text: "OpenEBS LocalPV"
+        - text: " with HA topology; integrated "
+        - text: "image/cluster scanning, secrets management, and cluster hardening"
           marks: [bold]
-        - text: " with a 2 shard x 2 replica strategy; segmented node pools (stateful / stateless) via taints & labels."
-      - - text: "Automated GitOps and workflow pipelines with "
-        - text: "ArgoCD + Argo Workflows"
-          marks: [bold]
-        - text: " and built a reusable function-like NodeJS execution model (NFS + shared deps, no rebuild); automated daily SLO reports via Grafana "
-        - text: " -> GChat webhook."
+        - text: " into platform pipelines via Python/Bash automation."
   - title: "DevOps Engineer"
     company: "FPT Software"
     companyUrl: "https://fptsoftware.com/"
     period: "Aug 2023 - Aug 2025"
     bullets:
-      - - text: "Owned CI/CD and release for an "
+      - - text: "Owned CI/CD and release engineering for an "
         - text: "AI / LLM code-assistant platform"
           marks: [bold]
-        - text: ": Jenkins shared libraries + GitOps via ArgoCD, scaled LLM models on "
-        - text: "AKS with Helm"
+        - text: " - "
+        - text: "Jenkins"
           marks: [bold]
-        - text: ", and wired Prometheus / Grafana / Loki + "
-        - text: "OpenTelemetry"
+        - text: " with GitOps via ArgoCD; scaled LLM workloads on "
+        - text: "AKS"
           marks: [bold]
-        - text: " distributed tracing."
+        - text: " and wired distributed tracing on "
+        - text: "Prometheus / Grafana / Loki / OpenTelemetry"
+          marks: [bold]
+        - text: " for end-to-end visibility."
       - - text: "Designed and provisioned "
-        - text: "scalable AWS infrastructure"
+        - text: "production AWS infrastructure"
           marks: [bold]
         - text: " with "
-        - text: "Terraform"
+        - text: "Terraform and AWS CDK"
           marks: [bold]
-        - text: " and "
-        - text: "AWS CDK"
-          marks: [bold]
-        - text: " - ECS microservices, VPC, ALB, RDS, S3, API Gateway, Lambda - across multiple engagements."
+        - text: " - ECS, networking, RDS, Lambda/API Gateway, plus KMS and Secrets Manager - across multiple engagements."
       - - text: "Built "
         - text: "fully serverless"
           marks: [bold]
-        - text: " platforms on AWS (Lambda, API Gateway, DynamoDB, Cognito, S3) with CI/CD via "
+        - text: " platforms on AWS (Lambda, API Gateway, DynamoDB, Cognito, SQS/SNS) with CI/CD via "
         - text: "AWS CodePipeline"
           marks: [bold]
-        - text: "; operated workloads on "
+        - text: "; operated multi-cloud workloads on "
         - text: "EKS and GKE"
           marks: [bold]
-        - text: " with monitoring and logging."
-  - title: "Laboratory Intern"
-    company: "FPT University Laboratory"
-    companyUrl: "https://iahn.fpt.edu.vn/"
-    period: "Mar 2023 - Aug 2023"
-    bullets:
-      - - text: "Developed backend services with "
-        - text: "Java Spring Boot"
-          marks: [bold]
-        - text: " integrated with AWS services; mentored teammates on backend and cloud fundamentals."
+        - text: " with monitoring, logging, and Python/Bash automation."
 
 skills:
   - group: "Cloud & Compute"
-    items: "AWS / Azure / GCP / ECS / EKS / AKS / GKE / VPC / ALB / RDS / S3"
+    items: "AWS / Azure / GCP / ECS / EKS / AKS / GKE / VPC / ALB / RDS / S3 / KMS / Secrets Manager / SQS / SNS"
   - group: "K8s & Platform"
-    items: "Kubernetes / RKE2 / Helm / Docker / ArgoCD / Argo Workflows / GitOps / service onboarding"
+    items: "Kubernetes / RKE2 / Helm / Docker / ArgoCD / Argo Workflows / GitOps / Backstage / service onboarding"
   - group: "IaC & CI/CD"
     items: "Terraform / AWS CDK / Pulumi / Jenkins / Jenkins shared libraries / GitLab CI / AWS CodePipeline"
   - group: "SRE & Observability"
-    items: "SLI/SLO/SLA / burn-rate alerting / on-call / incident response / Prometheus / Grafana / ELK / Loki / OpenTelemetry"
+    items: "SLI/SLO/SLA / burn-rate alerting / on-call / incident response / Prometheus / Grafana / Mimir / Alloy / ELK / Loki / OpenTelemetry"
   - group: "Serverless & Data"
-    items: "Lambda / API Gateway / Cognito / DynamoDB / DocumentDB / Aurora/RDS / Kafka / Redis / Elasticsearch"
+    items: "Lambda / API Gateway / Cognito / DynamoDB / DocumentDB / Aurora/RDS / BigQuery / Kafka / Redis / Elasticsearch"
   - group: "Languages & Apps"
-    items: "Bash / Node.js / TypeScript / React.js / Java Spring Boot / Python / English communication / teamwork"
+    items: "Bash / Python / Node.js / TypeScript / React.js / Java Spring Boot"
 
 education:
   - school: "FPT University"
     schoolUrl: "https://daihoc.fpt.edu.vn/"
     credential: "Bachelor's degree in Software Engineering"
-    period: "Oct 2021 - Aug 2025"
+    period: ""
     bullets:
       - - text: "Graduation project "
-        - text: "FCTF (FPT Capture The Flag)"
+        - text: "FCTF - FPT Capture The Flag"
           marks: [bold]
           href: "https://iahn.fpt.edu.vn/du-an/fpt-capture-the-flag-fctf"
-        - text: "."
+        - text: " (iahn.fpt.edu.vn) - open-source CTF competition platform graded "
+        - text: "A+ (highest in the semester)"
+          marks: [bold]
+        - text: "; built "
+        - text: "isolated per-contestant sandboxed containers"
+          marks: [bold]
+        - text: " and automated challenge lifecycle management for safe, reproducible environments at scale."
 
 certifications:
   - name: "AWS Certified Solutions Architect - Associate"

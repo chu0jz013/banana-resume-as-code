@@ -45,7 +45,7 @@ export type EducationEntry = {
   schoolUrl?: string
   credential: string
   period: string
-  bullets: RichText[]
+  bullets?: RichText[]
 }
 
 export type Certification = {
@@ -57,7 +57,7 @@ export type Certification = {
 export type ResumeData = {
   profile: Profile
   summary: RichText
-  projects: Project[]
+  projects?: Project[]
   experience: ExperienceRole[]
   skills: SkillGroup[]
   education: EducationEntry[]

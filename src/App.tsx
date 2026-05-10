@@ -356,7 +356,12 @@ function App() {
           <p className="contact">
             {activeResume.profile.contacts.map((contact, index) => (
               <Fragment key={`${contact.label}-${index}`}>
-                {index > 0 && <span className="bar">|</span>}
+                {index > 0 && (
+                  <>
+                    {' '}
+                    <span className="bar">|</span>{' '}
+                  </>
+                )}
                 {contact.href ? (
                   <a
                     href={contact.href}
@@ -390,6 +395,9 @@ function App() {
                   ) : (
                     role.company
                   )}
+                  {role.companyUrl && (
+                    <span className="entry-url"> · {displayHost(role.companyUrl)}</span>
+                  )}
                 </span>
                 <span className="entry-right">{role.period}</span>
               </div>
@@ -402,31 +410,33 @@ function App() {
           ))}
         </Section>
 
-        <Section title="Projects">
-          {activeResume.projects.map((project) => (
-            <div className="entry" key={project.name}>
-              <div className="entry-head">
-                <span className="entry-left">{project.name}</span>
-                {(project.url || project.urlLabel) && (
-                  <span className="entry-right">
-                    {project.url ? (
-                      <a href={project.url} target="_blank" rel="noreferrer">
-                        {project.urlLabel ?? project.url}
-                      </a>
-                    ) : (
-                      project.urlLabel
-                    )}
-                  </span>
-                )}
+        {activeResume.projects && activeResume.projects.length > 0 && (
+          <Section title="Projects">
+            {activeResume.projects.map((project) => (
+              <div className="entry" key={project.name}>
+                <div className="entry-head">
+                  <span className="entry-left">{project.name}</span>
+                  {(project.url || project.urlLabel) && (
+                    <span className="entry-right">
+                      {project.url ? (
+                        <a href={project.url} target="_blank" rel="noreferrer">
+                          {project.urlLabel ?? project.url}
+                        </a>
+                      ) : (
+                        project.urlLabel
+                      )}
+                    </span>
+                  )}
+                </div>
+                <ul className="bullets">
+                  {project.bullets.map((bullet, index) => (
+                    <li key={index}>{renderRichText(bullet)}</li>
+                  ))}
+                </ul>
               </div>
-              <ul className="bullets">
-                {project.bullets.map((bullet, index) => (
-                  <li key={index}>{renderRichText(bullet)}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </Section>
+            ))}
+          </Section>
+        )}
 
         <Section title="Skills">
           <div className="skills">
@@ -451,15 +461,20 @@ function App() {
                   ) : (
                     <b>{entry.school}</b>
                   )}
+                  {entry.schoolUrl && (
+                    <span className="entry-url"> · {displayHost(entry.schoolUrl)}</span>
+                  )}
                   , {entry.credential}
                 </span>
                 <span className="entry-right">{entry.period}</span>
               </div>
-              <ul className="bullets">
-                {entry.bullets.map((bullet, index) => (
-                  <li key={index}>{renderRichText(bullet)}</li>
-                ))}
-              </ul>
+              {entry.bullets && entry.bullets.length > 0 && (
+                <ul className="bullets">
+                  {entry.bullets.map((bullet, index) => (
+                    <li key={index}>{renderRichText(bullet)}</li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </Section>
@@ -476,6 +491,9 @@ function App() {
                   <b>{certification.name}</b>
                 )}
                 , {certification.issuer}
+                {certification.url && (
+                  <span className="entry-url"> · {displayHost(certification.url)}</span>
+                )}
               </li>
             ))}
           </ul>
@@ -519,6 +537,15 @@ function renderRichTextSpan(span: RichTextSpan): ReactNode {
 
 function isExternalHref(href: string) {
   return href.startsWith('http://') || href.startsWith('https://')
+}
+
+function displayHost(href: string): string {
+  try {
+    const url = new URL(href)
+    return url.hostname.replace(/^www\./, '')
+  } catch {
+    return href
+  }
 }
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
@@ -756,19 +783,20 @@ const css = `
     font-size: 12.5px; color: #1f2937;
     line-height: 1.4;
   }
-  .contact .bar { color: #9ca3af; margin: 0 6px; }
+  .contact .bar { color: #9ca3af; margin: 0 2px; }
+  .contact a, .contact > span:not(.bar) { white-space: nowrap; }
 
   .section { margin-top: 14px; }
   .section-title {
     font-size: 15px; font-weight: 700; color: #111827;
     margin: 0 0 4px;
     padding-bottom: 2px;
-    border-bottom: 1px solid #111827;
+    border-bottom: 1px solid #d1d5db;
     letter-spacing: -0.1px;
   }
   .section-body { font-size: 12.5px; line-height: 1.45; color: #1f2937; }
 
-  .para { margin: 4px 0 0; text-align: justify; hyphens: auto; }
+  .para { margin: 4px 0 0; text-align: left; hyphens: manual; }
 
   .entry { margin-top: 6px; }
   .entry:first-child { margin-top: 2px; }
@@ -779,6 +807,7 @@ const css = `
   }
   .entry-left { color: #111827; }
   .entry-right { color: #1f2937; font-variant-numeric: tabular-nums; }
+  .entry-url { color: #6b7280; font-size: 0.88em; white-space: nowrap; }
 
   .bullets {
     margin: 2px 0 0;
@@ -803,20 +832,20 @@ const css = `
   .skill-group { font-weight: 700; color: #111827; }
   .skill-items { color: #1f2937; }
 
-  .${PRINT_MEASURE_CLASS} .hdr { padding-right: 58px; padding-left: 58px; margin-bottom: 3px; }
-  .${PRINT_MEASURE_CLASS} .avatar { width: 58px; height: 58px; top: 0; }
+  .${PRINT_MEASURE_CLASS} .hdr { padding-right: 64px; padding-left: 64px; margin-bottom: 4px; }
+  .${PRINT_MEASURE_CLASS} .avatar { width: 64px; height: 64px; top: 0; }
   .${PRINT_MEASURE_CLASS} .name { font-size: 20pt; }
-  .${PRINT_MEASURE_CLASS} .contact { font-size: 8pt; margin-top: 2px; }
-  .${PRINT_MEASURE_CLASS} .section { margin-top: 6px; }
-  .${PRINT_MEASURE_CLASS} .section-title { font-size: 11.55pt; margin-bottom: 1px; padding-bottom: 1px; }
-  .${PRINT_MEASURE_CLASS} .section-body { font-size: 9.85pt; line-height: 1.23; }
+  .${PRINT_MEASURE_CLASS} .contact { font-size: 8pt; margin-top: 3px; }
+  .${PRINT_MEASURE_CLASS} .section { margin-top: 9px; }
+  .${PRINT_MEASURE_CLASS} .section-title { font-size: 11.55pt; margin-bottom: 2px; padding-bottom: 2px; }
+  .${PRINT_MEASURE_CLASS} .section-body { font-size: 9.85pt; line-height: 1.35; }
   .${PRINT_MEASURE_CLASS} .para { font-size: 9.85pt; }
-  .${PRINT_MEASURE_CLASS} .entry { margin-top: 2px; }
+  .${PRINT_MEASURE_CLASS} .entry { margin-top: 4px; }
   .${PRINT_MEASURE_CLASS} .entry-head { font-size: 9.85pt; }
   .${PRINT_MEASURE_CLASS} .entry-right { font-size: 9.35pt; }
-  .${PRINT_MEASURE_CLASS} .bullets { padding-left: 12px; margin-top: 0; }
-  .${PRINT_MEASURE_CLASS} .bullets li { margin: 0; }
-  .${PRINT_MEASURE_CLASS} .skill-row { font-size: 9.35pt; grid-template-columns: 112px 1fr; gap: 6px; }
+  .${PRINT_MEASURE_CLASS} .bullets { padding-left: 14px; margin-top: 1px; }
+  .${PRINT_MEASURE_CLASS} .bullets li { margin: 1px 0; }
+  .${PRINT_MEASURE_CLASS} .skill-row { font-size: 9.35pt; grid-template-columns: 120px 1fr; gap: 8px; }
 
   @media (max-width: 1100px) {
     .resume-workbench {
@@ -896,20 +925,20 @@ const css = `
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
-    .hdr { padding-right: 58px; padding-left: 58px; margin-bottom: 3px; }
-    .avatar { width: 58px; height: 58px; top: 0; }
+    .hdr { padding-right: 64px; padding-left: 64px; margin-bottom: 4px; }
+    .avatar { width: 64px; height: 64px; top: 0; }
     .name { font-size: 20pt; }
-    .contact { font-size: 8pt; margin-top: 2px; }
-    .section { margin-top: 6px; }
-    .section-title { font-size: 11.55pt; margin-bottom: 1px; padding-bottom: 1px; }
-    .section-body { font-size: 9.85pt; line-height: 1.23; }
+    .contact { font-size: 8pt; margin-top: 3px; }
+    .section { margin-top: 9px; }
+    .section-title { font-size: 11.55pt; margin-bottom: 2px; padding-bottom: 2px; }
+    .section-body { font-size: 9.85pt; line-height: 1.35; }
     .para { font-size: 9.85pt; }
-    .entry { margin-top: 2px; }
+    .entry { margin-top: 4px; }
     .entry-head { font-size: 9.85pt; }
     .entry-right { font-size: 9.35pt; }
-    .bullets { padding-left: 12px; margin-top: 0; }
-    .bullets li { margin: 0; }
-    .skill-row { font-size: 9.35pt; grid-template-columns: 112px 1fr; gap: 6px; }
+    .bullets { padding-left: 14px; margin-top: 1px; }
+    .bullets li { margin: 1px 0; }
+    .skill-row { font-size: 9.35pt; grid-template-columns: 120px 1fr; gap: 8px; }
     a { color: #111827; }
     .entry, .skill-row { page-break-inside: avoid; break-inside: avoid; }
   }
