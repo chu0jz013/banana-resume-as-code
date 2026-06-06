@@ -314,37 +314,6 @@ function App() {
       </div>
 
       <div className="resume-workbench">
-        <aside className="yaml-panel" aria-label="YAML editor">
-          <div className="yaml-panel-head">
-            <span className="yaml-panel-title">YAML</span>
-            <div className="yaml-panel-actions">
-              <button className="ghost-btn" type="button" onClick={handleResetYaml}>
-                Reset
-              </button>
-              <button className="print-btn" type="button" onClick={handleApplyYaml}>
-                Apply YAML
-              </button>
-            </div>
-          </div>
-          <textarea
-            className="yaml-editor"
-            value={draftYaml}
-            onChange={(event) => handleDraftYamlChange(event.target.value)}
-            spellCheck={false}
-            aria-label="Resume YAML"
-          />
-          <div className={`yaml-status ${yamlStatus.kind}`}>
-            <span>{yamlStatus.message}</span>
-            {yamlStatus.kind === 'error' && (
-              <ul>
-                {yamlStatus.issues.map((issue) => (
-                  <li key={issue}>{issue}</li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </aside>
-
         <div className="resume-stage">
           <main
             className="resume"
@@ -500,6 +469,37 @@ function App() {
         </Section>
           </main>
         </div>
+
+        <aside className="yaml-panel" aria-label="YAML editor">
+          <div className="yaml-panel-head">
+            <span className="yaml-panel-title">YAML</span>
+            <div className="yaml-panel-actions">
+              <button className="ghost-btn" type="button" onClick={handleResetYaml}>
+                Reset
+              </button>
+              <button className="print-btn" type="button" onClick={handleApplyYaml}>
+                Apply YAML
+              </button>
+            </div>
+          </div>
+          <textarea
+            className="yaml-editor"
+            value={draftYaml}
+            onChange={(event) => handleDraftYamlChange(event.target.value)}
+            spellCheck={false}
+            aria-label="Resume YAML"
+          />
+          <div className={`yaml-status ${yamlStatus.kind}`}>
+            <span>{yamlStatus.message}</span>
+            {yamlStatus.kind === 'error' && (
+              <ul>
+                {yamlStatus.issues.map((issue) => (
+                  <li key={issue}>{issue}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </aside>
       </div>
     </div>
   )
@@ -659,7 +659,7 @@ const css = `
     padding: 0 28px;
     box-sizing: border-box;
     display: grid;
-    grid-template-columns: minmax(360px, 560px) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 560px);
     gap: 24px;
     align-items: start;
   }
