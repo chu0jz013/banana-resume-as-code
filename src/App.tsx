@@ -501,6 +501,17 @@ function App() {
           </div>
         </aside>
       </div>
+
+      <footer className="site-footer">
+        <span>Built with React + YAML · </span>
+        <a
+          href="https://github.com/chu0jz013/banana-resume-as-code"
+          target="_blank"
+          rel="noreferrer"
+        >
+          view source
+        </a>
+      </footer>
     </div>
   )
 }
@@ -581,7 +592,13 @@ const css = `
     box-sizing: border-box;
     text-align: left;
   }
-  .resume-root { width: 100%; min-height: 100vh; }
+  .resume-root {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .resume-root > .resume-workbench { flex: 1 0 auto; }
   .resume-root a { color: #111827; text-decoration: underline; text-underline-offset: 2px; }
   .resume-root a:hover { color: #1d4ed8; }
 
@@ -743,6 +760,19 @@ const css = `
     border: 1px solid #d1d5db;
   }
 
+  .site-footer {
+    flex: 0 0 auto;
+    padding: 18px 24px 28px;
+    text-align: center;
+    font-size: 12px;
+    color: #6b7280;
+    background: #fff;
+    border-top: 1px solid #d1d5db;
+    font-family: -apple-system, "Segoe UI", Inter, sans-serif;
+  }
+  .site-footer a { color: #6b7280; text-decoration: underline; text-underline-offset: 2px; }
+  .site-footer a:hover { color: #1d4ed8; }
+
   .${PRINT_MEASURE_CLASS} {
     position: absolute !important;
     visibility: hidden !important;
@@ -858,16 +888,40 @@ const css = `
   }
 
   @media (max-width: 680px) {
-    .resume-workbench { width: 100%; margin: 14px 0 32px; }
-    .yaml-panel { margin: 0 14px 14px; }
-    .yaml-panel-head { align-items: flex-start; flex-direction: column; }
-    .yaml-panel-actions { justify-content: flex-start; }
-    .yaml-editor { min-height: 320px; }
-    .resume { padding: 28px 24px; margin: 14px; }
-    .resume-stage .resume { margin: 14px; }
+    .resume-workbench { width: 100%; margin: 12px 0 24px; padding: 0; }
+    .yaml-panel { display: none; }
+
+    .toolbar-inner { padding: 8px 14px; gap: 8px; }
+    .toolbar-title { display: none; }
+    .print-hint { display: none; }
+    .font-picker-label { display: none; }
+    .font-picker select { min-width: 0; max-width: 140px; font-size: 12px; padding: 4px 6px; }
+    .toolbar-actions { gap: 8px; }
+    .ghost-btn, .print-btn { padding: 6px 10px; font-size: 12px; }
+
+    .resume {
+      padding: 24px 18px;
+      margin: 12px;
+      max-width: none;
+    }
+    .resume-stage .resume { margin: 12px; }
     .hdr { padding: 0; }
-    .avatar { position: static; display: block; margin: 0 auto 10px; }
+    .avatar { position: static; display: block; margin: 0 auto 10px; width: 72px; height: 72px; }
+    .name { font-size: 26px; }
+    .contact { font-size: 11.5px; }
+    .contact a, .contact > span:not(.bar) { white-space: normal; }
+    .section-title { font-size: 14px; }
+    .section-body, .entry-head { font-size: 12px; }
     .skill-row { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 420px) {
+    .resume { padding: 20px 14px; margin: 8px; }
+    .resume-stage .resume { margin: 8px; }
+    .name { font-size: 22px; }
+    .avatar { width: 64px; height: 64px; }
+    .toolbar-actions .font-picker { display: none; }
+    .site-footer { padding: 14px 16px 22px; font-size: 11.5px; }
   }
 
   @media print {
@@ -909,7 +963,7 @@ const css = `
       display: block;
       overflow: hidden;
     }
-    .toolbar, .yaml-panel, .print-hint, .fit-badge, .ghost-btn { display: none !important; }
+    .toolbar, .yaml-panel, .print-hint, .fit-badge, .ghost-btn, .site-footer { display: none !important; }
     .resume {
       width: 210mm;
       height: 297mm;
