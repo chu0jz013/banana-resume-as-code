@@ -303,6 +303,9 @@ function App() {
             <button className="ghost-btn" onClick={handlePreviewFit} type="button">
               Preview fit
             </button>
+            <span className="print-hint">
+              Tip: uncheck "Headers and footers" in print dialog for a clean PDF.
+            </span>
             <button className="print-btn" onClick={handlePrint} type="button">
               Download PDF
             </button>
@@ -584,7 +587,8 @@ const css = `
 
   .toolbar {
     position: sticky; top: 0; z-index: 10;
-    background: #fff;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: saturate(1.2) blur(6px);
     border-bottom: 1px solid #d1d5db;
     font-family: -apple-system, "Segoe UI", Inter, sans-serif;
   }
@@ -616,6 +620,10 @@ const css = `
   }
   .font-picker select:hover { border-color: #9ca3af; }
   .font-picker select:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 1px; }
+  .print-hint {
+    font-size: 11.5px; color: #6b7280; font-style: italic;
+    max-width: 320px; text-align: right; line-height: 1.3;
+  }
   .print-btn {
     background: #111827; color: #fff; border: none;
     padding: 8px 14px; border-radius: 6px;
@@ -647,8 +655,8 @@ const css = `
 
   .resume-workbench {
     width: 100%;
-    margin: 24px 0 0;
-    padding: 0 28px 24px;
+    margin: 24px 0 48px;
+    padding: 0 28px;
     box-sizing: border-box;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(360px, 560px);
@@ -728,7 +736,7 @@ const css = `
 
   .resume {
     max-width: 820px;
-    margin: 0 auto;
+    margin: 28px auto 48px;
     background: #fff;
     padding: 56px 64px;
     box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 8px 24px rgba(0,0,0,.08);
@@ -901,7 +909,7 @@ const css = `
       display: block;
       overflow: hidden;
     }
-    .toolbar, .yaml-panel, .fit-badge, .ghost-btn { display: none !important; }
+    .toolbar, .yaml-panel, .print-hint, .fit-badge, .ghost-btn { display: none !important; }
     .resume {
       width: 210mm;
       height: 297mm;
