@@ -370,7 +370,7 @@ export const resume: ResumeData = {
   "education": [
     {
       "school": "FPT University",
-      "schoolUrl": "https://daihoc.fpt.edu.vn/en/",
+      "schoolUrl": "https://daihoc.fpt.edu.vn/",
       "credential": "Bachelor's degree in Software Engineering",
       "period": "",
       "bullets": [
