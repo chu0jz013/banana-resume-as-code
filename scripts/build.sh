@@ -3,6 +3,8 @@ set -euo pipefail
 
 npm run build
 
+echo "resumeascode.quachuoitrenmay.com" > docs/CNAME
+
 git add docs/
 if git diff --cached --quiet; then
   echo "No changes to deploy."
