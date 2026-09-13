@@ -386,13 +386,7 @@ export const resume: ResumeData = {
             "href": "https://iahn.fpt.edu.vn/du-an/fpt-capture-the-flag-fctf"
           },
           {
-            "text": " (iahn.fpt.edu.vn) - open-source CTF competition platform graded "
-          },
-          {
-            "text": "A+ (highest in the semester)",
-            "marks": [
-              "bold"
-            ]
+            "text": " (iahn.fpt.edu.vn) - open-source CTF competition platform"
           },
           {
             "text": "; built "
