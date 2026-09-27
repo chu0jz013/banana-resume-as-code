@@ -5,12 +5,14 @@ profile:
   contacts:
     - label: "williamkieu-devops@outlook.com"
       href: "mailto:williamkieu-devops@outlook.com"
-    - label: "+84 961 513 848"
+    - label: "+84 961513848"
+      href: "tel:+84961513848"
     - label: "github.com/chu0jz013"
       href: "https://github.com/chu0jz013"
     - label: "Linkedin"
       href: "https://www.linkedin.com/in/williamkieuu/"
-    - label: "Hanoi, Vietnam"
+      newLine: true
+    - label: "Vietnam"
 
 summary:
   - text: "DevOps Engineer / SRE "
@@ -42,7 +44,7 @@ experience:
   - title: "DevOps Engineer / SRE"
     company: "KiotViet Technology"
     companyUrl: "https://kiotviet.vn"
-    period: "Sep 2025 - Present"
+    period: "Sep 2025 - Aug 2026"
     bullets:
       - - text: "Operate "
         - text: "Kubernetes-based production systems"
@@ -142,7 +144,9 @@ education:
         - text: "FCTF - FPT Capture The Flag"
           marks: [bold]
           href: "https://iahn.fpt.edu.vn/du-an/fpt-capture-the-flag-fctf"
-        - text: " (iahn.fpt.edu.vn) - open-source CTF competition platform"
+        - text: " (iahn.fpt.edu.vn)"
+        - text: "- open-source CTF competition platform"
+          newLine: true
         - text: "; built "
         - text: "isolated per-contestant sandboxed containers"
           marks: [bold]

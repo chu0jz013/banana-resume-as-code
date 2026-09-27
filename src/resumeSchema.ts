@@ -9,6 +9,7 @@ const richTextSpanSchema = z
     text: z.string().min(1),
     marks: z.array(markSchema).min(1).optional(),
     href: z.string().min(1).optional(),
+    newLine: z.boolean().optional(),
   })
   .strict()
 
@@ -27,6 +28,7 @@ const resumeSchema = z
               .object({
                 label: z.string().min(1),
                 href: z.string().min(1).optional(),
+                newLine: z.boolean().optional(),
               })
               .strict(),
           )

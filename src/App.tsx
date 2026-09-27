@@ -325,11 +325,15 @@ function App() {
           <p className="contact">
             {activeResume.profile.contacts.map((contact, index) => (
               <Fragment key={`${contact.label}-${index}`}>
-                {index > 0 && (
-                  <>
-                    {' '}
-                    <span className="bar">|</span>{' '}
-                  </>
+                {contact.newLine ? (
+                  <br />
+                ) : (
+                  index > 0 && (
+                    <>
+                      {' '}
+                      <span className="bar">|</span>{' '}
+                    </>
+                  )
                 )}
                 {contact.href ? (
                   <a
@@ -517,7 +521,12 @@ function App() {
 }
 
 function renderRichText(richText: RichText) {
-  return richText.map((span, index) => <Fragment key={index}>{renderRichTextSpan(span)}</Fragment>)
+  return richText.map((span, index) => (
+    <Fragment key={index}>
+      {span.newLine && <br />}
+      {renderRichTextSpan(span)}
+    </Fragment>
+  ))
 }
 
 function renderRichTextSpan(span: RichTextSpan): ReactNode {

@@ -14,7 +14,8 @@ export const resume: ResumeData = {
         "href": "mailto:williamkieu-devops@outlook.com"
       },
       {
-        "label": "+84 961 513 848"
+        "label": "+84 961513848",
+        "href": "tel:+84961513848"
       },
       {
         "label": "github.com/chu0jz013",
@@ -22,10 +23,11 @@ export const resume: ResumeData = {
       },
       {
         "label": "Linkedin",
-        "href": "https://www.linkedin.com/in/williamkieuu/"
+        "href": "https://www.linkedin.com/in/williamkieuu/",
+        "newLine": true
       },
       {
-        "label": "Hanoi, Vietnam"
+        "label": "Vietnam"
       }
     ]
   },
@@ -108,7 +110,7 @@ export const resume: ResumeData = {
       "title": "DevOps Engineer / SRE",
       "company": "KiotViet Technology",
       "companyUrl": "https://kiotviet.vn",
-      "period": "Sep 2025 - Present",
+      "period": "Sep 2025 - Aug 2026",
       "bullets": [
         [
           {
@@ -386,7 +388,11 @@ export const resume: ResumeData = {
             "href": "https://iahn.fpt.edu.vn/du-an/fpt-capture-the-flag-fctf"
           },
           {
-            "text": " (iahn.fpt.edu.vn) - open-source CTF competition platform"
+            "text": " (iahn.fpt.edu.vn)"
+          },
+          {
+            "text": "- open-source CTF competition platform",
+            "newLine": true
           },
           {
             "text": "; built "

@@ -4,6 +4,7 @@ export type RichTextSpan = {
   text: string
   marks?: TextMark[]
   href?: string
+  newLine?: boolean
 }
 
 export type RichText = RichTextSpan[]
@@ -11,6 +12,7 @@ export type RichText = RichTextSpan[]
 export type ContactItem = {
   label: string
   href?: string
+  newLine?: boolean
 }
 
 export type Profile = {
